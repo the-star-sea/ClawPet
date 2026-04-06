@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClawPet | Your Embodied AI Desktop Companion</title>
+  <meta name="description" content="A 3D-printed, OpenClaw-powered desktop pet that brings AI to life through voice, physical movement, and agent-to-agent interactions.">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-surface: #171717;
+      --text: #ffffff;
+      --text-muted: #a3a3a3;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --border: #262626;
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Navbar */
+    header {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background: var(--bg-surface);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(59, 130, 246, 0.1);
+      color: #60a5fa;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 8vw, 4.5rem);
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      font-size: clamp(1.1rem, 4vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-image {
+      margin-top: 60px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      aspect-ratio: 16/9;
+      background: var(--bg-surface);
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 100px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: #3f3f46;
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(59, 130, 246, 0.1);
+      color: #60a5fa;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    
+    /* Dual Grid for A2A / Hardware */
+    .dual-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      margin-top: 32px;
+    }
+    
+    @media (min-width: 768px) {
+      .dual-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .dual-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    
+    .dual-image {
+      height: 240px;
+      background: #262626;
+      width: 100%;
+    }
+    
+    .dual-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .dual-content {
+      padding: 32px;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 80px 0;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg) 0%, #111827 100%);
+      border-top: 1px solid var(--border);
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 5vw, 2.5rem);
+      margin-bottom: 24px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 640px) {
+      .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+      .btn {
+        width: 100%;
+      }
+      .hero {
+        padding: 60px 0 40px;
+      }
+      .features {
+        padding: 60px 0;
+      }
+      .feature-card {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav-content">
+      <div class="logo">ClawPet</div>
+      <a href="#preorder" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.875rem;">Get Updates</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero container">
+      <div class="hero-badge">Powered by OpenClaw</div>
+      <h1>The Soul of AI on<br>Your Desktop.</h1>
+      <p>A 3D-printed embodied AI companion. It talks, moves, and even chats with other agents. Bring the intelligence out of the screen.</p>
+      
+      <div class="hero-buttons">
+        <button class="btn btn-primary">Join the Waitlist</button>
+        <button class="btn btn-outline">Download STL Files</button>
+      </div>
+
+      <div class="hero-image">
+        <!-- Temporary high-quality placeholder until image gen recovers -->
+        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1536&auto=format&fit=crop" alt="ClawPet Prototype">
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features container">
+      <div class="section-header">
+        <h2>More than a Voice Assistant</h2>
+        <p>Built with physical presence to seamlessly integrate into your daily life.</p>
+      </div>
+
+      <div class="grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+          </div>
+          <h3>Conversational Voice</h3>
+          <p>Talk to ClawPet naturally. With ultra-low latency voice models, it listens, understands, and replies just like a human companion.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <h3>Physical Expressions</h3>
+          <p>It's not just text on a screen. ClawPet nods, gestures with its small arms, and displays dynamic emotions on its LED face.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          </div>
+          <h3>Agent-to-Agent</h3>
+          <p>Have two ClawPets? They talk to each other. They negotiate tasks, share context, and banter, creating a lively embodied ecosystem.</p>
+        </div>
+      </div>
+      
+      <div class="dual-grid">
+        <div class="dual-card">
+          <div class="dual-image">
+            <img src="https://images.unsplash.com/photo-1546776310-eef45dd6d63c?q=80&w=1024&auto=format&fit=crop" alt="3D Printed Assembly">
+          </div>
+          <div class="dual-content">
+            <h3>Fully 3D-Printable Shell</h3>
+            <p style="color: var(--text-muted); margin-top: 8px;">Download the STL files and print your own custom shell. Snap in the standard servo motors and Raspberry Pi, and you're ready to boot.</p>
+          </div>
+        </div>
+        
+        <div class="dual-card">
+          <div class="dual-image">
+            <img src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=1024&auto=format&fit=crop" alt="AI Agent Interface">
+          </div>
+          <div class="dual-content">
+            <h3>Powered by OpenClaw</h3>
+            <p style="color: var(--text-muted); margin-top: 8px;">ClawPet inherits the intelligence of the OpenClaw framework. It has long-term memory, can browse your workspace, and executes real tasks autonomously.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" id="preorder">
+      <div class="container">
+        <h2>Bring AI to the Physical World</h2>
+        <p style="color: var(--text-muted); margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto;">Sign up for the early access program. Be the first to build, modify, and interact with the ClawPet developer kit.</p>
+        <button class="btn btn-primary" style="padding: 16px 32px; font-size: 1.1rem;">Get Early Access</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 ClawPet / The Star Sea. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
