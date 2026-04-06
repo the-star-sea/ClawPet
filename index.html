@@ -3,413 +3,700 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ClawPet | Your Embodied AI Desktop Companion</title>
-  <meta name="description" content="A 3D-printed, OpenClaw-powered desktop pet that brings AI to life through voice, physical movement, and agent-to-agent interactions.">
+  <title>ClawPet | The Embodied AI Pet for Your Desk</title>
+  <meta name="description" content="ClawPet is an embodied AI desktop pet powered by OpenClaw. Voice-first, expressive, 3D-printable, and able to talk to other agents.">
   <style>
     :root {
-      --bg: #0a0a0a;
-      --bg-surface: #171717;
-      --text: #ffffff;
-      --text-muted: #a3a3a3;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --border: #262626;
-      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      --bg: #09090b;
+      --bg-soft: #111116;
+      --panel: rgba(255,255,255,0.04);
+      --panel-strong: rgba(255,255,255,0.06);
+      --text: #fafafa;
+      --muted: #a1a1aa;
+      --accent: #60a5fa;
+      --accent-2: #a78bfa;
+      --border: rgba(255,255,255,0.10);
+      --shadow: 0 30px 80px rgba(0,0,0,0.38);
+      --radius: 24px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      background-color: var(--bg);
+      font-family: var(--font);
+      background:
+        radial-gradient(circle at top left, rgba(96,165,250,0.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(167,139,250,0.14), transparent 28%),
+        linear-gradient(180deg, #0a0a0f 0%, #09090b 100%);
       color: var(--text);
-      font-family: var(--font-sans);
       line-height: 1.6;
       overflow-x: hidden;
     }
 
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
 
     .container {
-      width: 100%;
-      max-width: 1200px;
+      width: min(1180px, calc(100% - 28px));
       margin: 0 auto;
-      padding: 0 20px;
     }
 
-    /* Navbar */
     header {
-      padding: 24px 0;
-      border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(12px);
-      z-index: 100;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      background: rgba(9, 9, 11, 0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
-    .nav-content {
+    .nav {
+      min-height: 74px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
 
     .logo {
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       font-weight: 800;
-      letter-spacing: -0.02em;
-      background: linear-gradient(to right, #60a5fa, #a78bfa);
+      letter-spacing: -0.04em;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-link {
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .nav-link:hover { color: var(--text); }
+
     .btn {
+      appearance: none;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 12px 24px;
-      border-radius: 8px;
+      gap: 10px;
       font-weight: 600;
-      transition: all 0.2s ease;
+      transition: transform .18s ease, opacity .18s ease, border-color .18s ease, background .18s ease;
       cursor: pointer;
-      border: none;
+      font: inherit;
     }
 
+    .btn:hover { transform: translateY(-1px); }
     .btn-primary {
-      background: var(--accent);
-      color: white;
+      color: #08111f;
+      background: linear-gradient(90deg, #8fc7ff, #c2b4ff);
+      box-shadow: 0 10px 30px rgba(96,165,250,0.18);
     }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--border);
+    .btn-secondary {
       color: var(--text);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
     }
 
-    .btn-outline:hover {
-      background: var(--bg-surface);
-    }
-
-    /* Hero Section */
     .hero {
-      padding: 80px 0 60px;
-      text-align: center;
+      padding: 62px 0 36px;
     }
 
-    .hero-badge {
-      display: inline-block;
-      padding: 6px 16px;
-      background: rgba(59, 130, 246, 0.1);
-      color: #60a5fa;
-      border-radius: 999px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      margin-bottom: 24px;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
-      line-height: 1.1;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
-    }
-
-    .hero p {
-      font-size: clamp(1.1rem, 4vw, 1.25rem);
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 40px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .hero-image {
-      margin-top: 60px;
-      border-radius: 24px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      position: relative;
-      aspect-ratio: 16/9;
-      background: var(--bg-surface);
-    }
-
-    .hero-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* Features Section */
-    .features {
-      padding: 100px 0;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .section-header h2 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
-
-    .section-header p {
-      color: var(--text-muted);
-      font-size: 1.125rem;
-    }
-
-    .grid {
+    .hero-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 26px;
+      align-items: center;
     }
 
-    .feature-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: #c9ddff;
+      background: rgba(96,165,250,0.10);
+      border: 1px solid rgba(96,165,250,0.18);
+      font-size: 0.9rem;
+      font-weight: 600;
     }
 
-    .feature-card:hover {
-      transform: translateY(-4px);
-      border-color: #3f3f46;
+    h1 {
+      font-size: clamp(2.9rem, 7vw, 5.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      font-weight: 850;
+      margin-bottom: 20px;
+      max-width: 11ch;
     }
 
-    .feature-icon {
-      width: 48px;
-      height: 48px;
-      background: rgba(59, 130, 246, 0.1);
-      color: #60a5fa;
-      border-radius: 12px;
+    .hero-copy {
+      color: #d4d4d8;
+      font-size: clamp(1.06rem, 2vw, 1.22rem);
+      max-width: 620px;
+      margin-bottom: 24px;
+    }
+
+    .hero-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 26px;
+    }
+
+    .hero-point {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .hero-note {
+      color: #8f8f98;
+      font-size: 0.95rem;
+    }
+
+    .hero-card {
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      background: #111116;
+      min-height: 100%;
+    }
+
+    .hero-card img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+    }
+
+    .hero-card-caption {
+      padding: 16px 18px 18px;
+      border-top: 1px solid rgba(255,255,255,0.06);
       display: flex;
       align-items: center;
-      justify-content: center;
-      margin-bottom: 24px;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.94rem;
     }
 
-    .feature-icon svg {
-      width: 24px;
-      height: 24px;
+    .hero-card-caption strong {
+      color: var(--text);
+      display: block;
+      margin-bottom: 3px;
     }
 
-    .feature-card h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
+    section.block {
+      padding: 32px 0;
+    }
+
+    .section-head {
+      max-width: 720px;
+      margin-bottom: 26px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: #96baf7;
+      font-size: 0.84rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
       margin-bottom: 12px;
     }
 
-    .feature-card p {
-      color: var(--text-muted);
+    .section-head p {
+      color: var(--muted);
+      font-size: 1.06rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      padding: 24px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .card h3 {
+      font-size: 1.18rem;
+      margin-bottom: 10px;
+      letter-spacing: -0.03em;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      background: rgba(96,165,250,0.10);
+      color: #9bc8ff;
+      border: 1px solid rgba(96,165,250,0.16);
+    }
+
+    .split-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .media-card {
+      overflow: hidden;
+      border-radius: 28px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+    }
+
+    .media-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      background: #121217;
+    }
+
+    .media-body {
+      padding: 22px;
+    }
+
+    .media-body h3 {
+      font-size: 1.28rem;
+      margin-bottom: 10px;
+      letter-spacing: -0.03em;
+    }
+
+    .media-body p,
+    .media-body li,
+    .waitlist-copy,
+    .faq p {
+      color: var(--muted);
+    }
+
+    .media-body ul {
+      padding-left: 18px;
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .why-box {
+      padding: 24px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+    }
+
+    .why-box strong {
+      display: block;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      letter-spacing: -0.03em;
+    }
+
+    .waitlist {
+      padding: 30px;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at top right, rgba(96,165,250,0.12), transparent 35%),
+        radial-gradient(circle at top left, rgba(167,139,250,0.12), transparent 30%),
+        rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 22px;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    .waitlist-copy h2 { margin-bottom: 10px; }
+    .waitlist-copy p { font-size: 1.02rem; }
+
+    .waitlist-form {
+      background: rgba(0,0,0,0.20);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .waitlist-form label {
+      font-size: 0.92rem;
+      color: #d4d4d8;
+      display: grid;
+      gap: 7px;
+    }
+
+    .waitlist-form input,
+    .waitlist-form textarea,
+    .waitlist-form select {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+    }
+
+    .waitlist-form textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .waitlist-form input:focus,
+    .waitlist-form textarea:focus,
+    .waitlist-form select:focus {
+      border-color: rgba(96,165,250,0.55);
+      box-shadow: 0 0 0 4px rgba(96,165,250,0.12);
+    }
+
+    .fine {
+      color: #8b8b94;
+      font-size: 0.9rem;
+    }
+
+    .status {
+      color: #b6d6ff;
+      font-size: 0.95rem;
+      min-height: 1.4em;
+    }
+
+    .faq {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    footer {
+      padding: 28px 0 42px;
+      color: #8e8e96;
       font-size: 0.95rem;
     }
-    
-    /* Dual Grid for A2A / Hardware */
-    .dual-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 32px;
-      margin-top: 32px;
+
+    .footer-inner {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
     }
-    
-    @media (min-width: 768px) {
-      .dual-grid {
-        grid-template-columns: 1fr 1fr;
+
+    @media (max-width: 1024px) {
+      .hero-grid,
+      .waitlist,
+      .card-grid,
+      .split-grid,
+      .why-grid,
+      .faq {
+        grid-template-columns: 1fr;
       }
-    }
-    
-    .dual-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-    
-    .dual-image {
-      height: 300px;
-      background: #262626;
-      width: 100%;
-    }
-    
-    .dual-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .dual-content {
-      padding: 32px;
-    }
 
-    /* CTA Section */
-    .cta {
-      padding: 80px 0;
-      text-align: center;
-      background: linear-gradient(180deg, var(--bg) 0%, #111827 100%);
-      border-top: 1px solid var(--border);
-    }
-
-    .cta h2 {
-      font-size: clamp(2rem, 5vw, 2.5rem);
-      margin-bottom: 24px;
-    }
-
-    /* Footer */
-    footer {
-      padding: 40px 0;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    /* Mobile adjustments */
-    @media (max-width: 640px) {
-      .hero-buttons {
-        flex-direction: column;
-        width: 100%;
-      }
-      .btn {
-        width: 100%;
-      }
       .hero {
-        padding: 60px 0 40px;
+        padding-top: 44px;
       }
-      .features {
-        padding: 60px 0;
+
+      h1 {
+        max-width: none;
       }
-      .feature-card {
-        padding: 24px;
-      }
-      .dual-image {
-        height: 240px;
-      }
+    }
+
+    @media (max-width: 720px) {
+      .container { width: calc(100% - 18px); }
+      .nav { min-height: 64px; }
+      .nav-links .nav-link { display: none; }
+      .hero-copy { margin-bottom: 20px; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; }
+      .card, .media-body, .why-box, .waitlist, .waitlist-form { padding: 18px; }
+      .hero-card-caption { flex-direction: column; align-items: flex-start; }
+      .hero-card img { aspect-ratio: 1 / 1; }
+      .media-card img { aspect-ratio: 4 / 3; }
+      section.block { padding: 24px 0; }
+      footer { padding-top: 18px; }
     }
   </style>
 </head>
 <body>
-
   <header>
-    <div class="container nav-content">
-      <div class="logo">ClawPet</div>
-      <a href="#preorder" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.875rem;">Get Updates</a>
+    <div class="container nav">
+      <a class="logo" href="#top">ClawPet</a>
+      <div class="nav-links">
+        <a class="nav-link" href="#features">Features</a>
+        <a class="nav-link" href="#why">Why now</a>
+        <a class="nav-link" href="#waitlist">Waitlist</a>
+        <a class="btn btn-primary" href="#waitlist">Join waitlist</a>
+      </div>
     </div>
   </header>
 
-  <main>
-    <!-- Hero -->
-    <section class="hero container">
-      <div class="hero-badge">Powered by OpenClaw</div>
-      <h1>The Soul of AI on<br>Your Desktop.</h1>
-      <p>A 3D-printed embodied AI companion. It talks, moves, and even chats with other agents. Bring the intelligence out of the screen.</p>
-      
-      <div class="hero-buttons">
-        <button class="btn btn-primary">Join the Waitlist</button>
-        <button class="btn btn-outline">Download STL Files</button>
-      </div>
-
-      <div class="hero-image">
-        <img src="assets/hero.png" alt="ClawPet Prototype">
-      </div>
-    </section>
-
-    <!-- Features -->
-    <section class="features container">
-      <div class="section-header">
-        <h2>More than a Voice Assistant</h2>
-        <p>Built with physical presence to seamlessly integrate into your daily life.</p>
-      </div>
-
-      <div class="grid">
-        <!-- Feature 1 -->
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="badge">Powered by OpenClaw · built for the physical world</div>
+          <h1>The embodied AI pet for your desk.</h1>
+          <p class="hero-copy">
+            ClawPet brings agent intelligence out of the screen and into everyday life — with voice, memory,
+            simple physical motion, and agent-to-agent conversation inside a compact 3D-printable body.
+          </p>
+          <div class="hero-points">
+            <span class="hero-point">Voice-first</span>
+            <span class="hero-point">Expressive face + motion</span>
+            <span class="hero-point">Agent-to-agent chat</span>
+            <span class="hero-point">3D-printable shell</span>
           </div>
-          <h3>Conversational Voice</h3>
-          <p>Talk to ClawPet naturally. With ultra-low latency voice models, it listens, understands, and replies just like a human companion.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#waitlist">Join waitlist</a>
+            <a class="btn btn-secondary" href="https://github.com/the-star-sea/ClawPet" target="_blank" rel="noreferrer">View repo</a>
+          </div>
+          <div class="hero-note">For builders, researchers, and people who want AI to feel present — not trapped in tabs.</div>
         </div>
 
-        <!-- Feature 2 -->
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          </div>
-          <h3>Physical Expressions</h3>
-          <p>It's not just text on a screen. ClawPet nods, gestures with its small arms, and displays dynamic emotions on its LED face.</p>
-        </div>
-
-        <!-- Feature 3 -->
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-          </div>
-          <h3>Agent-to-Agent</h3>
-          <p>Have two ClawPets? They talk to each other. They negotiate tasks, share context, and banter, creating a lively embodied ecosystem.</p>
-        </div>
-      </div>
-      
-      <div class="dual-grid">
-        <div class="dual-card">
-          <div class="dual-image">
-            <img src="assets/a2a.png" alt="Agent to Agent Chat">
-          </div>
-          <div class="dual-content">
-            <h3>Talk to Each Other</h3>
-            <p style="color: var(--text-muted); margin-top: 8px;">Let your agents communicate natively. They can debate ideas, plan your schedule, or just keep each other company on your desk.</p>
-          </div>
-        </div>
-        
-        <div class="dual-card">
-          <div class="dual-image">
-            <img src="assets/expressions.png" alt="Hardware Prototype">
-          </div>
-          <div class="dual-content">
-            <h3>Fully 3D-Printable Shell</h3>
-            <p style="color: var(--text-muted); margin-top: 8px;">Download the STL files and print your own custom shell. Snap in the standard servo motors and Raspberry Pi, and you're ready to boot.</p>
+        <div class="hero-card">
+          <img src="assets/hero.png" alt="ClawPet hero product image">
+          <div class="hero-card-caption">
+            <div>
+              <strong>From terminal intelligence to physical presence</strong>
+              A desk companion with personality, memory, and embodied feedback.
+            </div>
+            <span>Prototype vision</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="cta" id="preorder">
+    <section class="block" id="features">
       <div class="container">
-        <h2>Bring AI to the Physical World</h2>
-        <p style="color: var(--text-muted); margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto;">Sign up for the early access program. Be the first to build, modify, and interact with the ClawPet developer kit.</p>
-        <button class="btn btn-primary" style="padding: 16px 32px; font-size: 1.1rem;">Get Early Access</button>
+        <div class="section-head">
+          <span class="eyebrow">Why it feels different</span>
+          <h2>More than a chatbot. Less than a humanoid. Exactly what your desk can hold.</h2>
+          <p>
+            The best AI companions do not need full humanoid robotics on day one. They need a body, a voice,
+            a face, memory, and just enough motion to feel alive.
+          </p>
+        </div>
+
+        <div class="card-grid">
+          <article class="card">
+            <div class="icon">🎙️</div>
+            <h3>Conversational voice</h3>
+            <p>Talk naturally. ClawPet listens, replies, and keeps context over time like a real companion instead of a one-shot assistant.</p>
+          </article>
+          <article class="card">
+            <div class="icon">✨</div>
+            <h3>Simple physical expression</h3>
+            <p>Nods, arm gestures, light, face changes, idle behavior — enough embodiment to make interaction emotionally legible.</p>
+          </article>
+          <article class="card">
+            <div class="icon">🤝</div>
+            <h3>Agent-to-agent conversation</h3>
+            <p>Put two ClawPets together and they can coordinate, discuss tasks, or just banter — turning assistants into a tiny social system.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="container split-grid">
+        <article class="media-card">
+          <img src="assets/a2a.png" alt="Two ClawPets talking to each other">
+          <div class="media-body">
+            <h3>Built for multi-agent life</h3>
+            <p>Most assistants are solo. ClawPet is designed for agent ecosystems: one pet on your desk, one on your shelf, one on your teammate’s table.</p>
+            <ul>
+              <li>Coordinate tasks across agents</li>
+              <li>Share memory and context</li>
+              <li>Create visible social behavior between AIs</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="media-card">
+          <img src="assets/expressions.png" alt="ClawPet with expressive gesture and 3D printed shell">
+          <div class="media-body">
+            <h3>3D-printable and hackable</h3>
+            <p>ClawPet is meant to be built, modified, and re-skinned. Print a new shell, swap the personality, tune the behavior, and make it your own.</p>
+            <ul>
+              <li>Downloadable shell designs</li>
+              <li>Commodity components and simple assembly</li>
+              <li>OpenClaw-native software layer</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="why">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Why now</span>
+          <h2>The right moment for embodied AI is smaller, cheaper, and more personal than people think.</h2>
+          <p>
+            Foundation models already feel intelligent. Voice is now natural. 3D printing is accessible. Commodity hardware is enough.
+            What is missing is product form.
+          </p>
+        </div>
+
+        <div class="why-grid">
+          <div class="why-box">
+            <strong>AI has a mind but no body.</strong>
+            <p>ClawPet gives agents a small physical interface — not for spectacle, but for presence, habit, and emotional continuity.</p>
+          </div>
+          <div class="why-box">
+            <strong>Robotics is finally light enough.</strong>
+            <p>You do not need a humanoid to create attachment. A desk-scale creature with voice, motion, and memory already changes the experience.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="waitlist">
+      <div class="container">
+        <div class="waitlist">
+          <div class="waitlist-copy">
+            <span class="eyebrow">Waitlist</span>
+            <h2>Get early access to ClawPet.</h2>
+            <p>
+              We are looking for early believers: hardware hackers, AI builders, researchers, creators, and anyone who wants to help shape the first generation of embodied desktop agents.
+            </p>
+            <p class="fine" style="margin-top: 12px;">
+              The current waitlist uses email compose for simplicity on GitHub Pages: submit and your device will open a pre-filled message.
+            </p>
+          </div>
+
+          <form class="waitlist-form" id="waitlist-form">
+            <label>
+              Name
+              <input type="text" id="name" name="name" placeholder="Your name" required>
+            </label>
+            <label>
+              Email
+              <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </label>
+            <label>
+              What best describes you?
+              <select id="role" name="role">
+                <option>Builder / hacker</option>
+                <option>Researcher</option>
+                <option>Founder / operator</option>
+                <option>Creator / designer</option>
+                <option>Just curious</option>
+              </select>
+            </label>
+            <label>
+              Why do you want ClawPet?
+              <textarea id="reason" name="reason" placeholder="What would you want your desktop pet to do?"></textarea>
+            </label>
+            <button class="btn btn-primary" type="submit">Join the waitlist</button>
+            <div class="status" id="waitlist-status"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">FAQ</span>
+          <h2>What this is — and what it is not.</h2>
+        </div>
+        <div class="faq">
+          <article class="card">
+            <h3>Is this a toy?</h3>
+            <p>Not really. It is closer to a personal AI device with a playful form factor than a traditional toy robot.</p>
+          </article>
+          <article class="card">
+            <h3>Is this full robotics?</h3>
+            <p>No. The bet is that lightweight embodiment already creates a dramatically better AI experience before full robotics is ready.</p>
+          </article>
+          <article class="card">
+            <h3>Why OpenClaw?</h3>
+            <p>Because agent memory, orchestration, messaging, and tool use already exist there. ClawPet is the physical shell for that intelligence.</p>
+          </article>
+        </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="container">
-      <p>&copy; 2026 ClawPet / The Star Sea. All rights reserved.</p>
+    <div class="container footer-inner">
+      <span>© 2026 ClawPet / The Star Sea</span>
+      <span>Built with OpenClaw, 3D printing, and a bias toward presence.</span>
     </div>
   </footer>
 
+  <script>
+    const form = document.getElementById('waitlist-form');
+    const statusEl = document.getElementById('waitlist-status');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const role = document.getElementById('role').value.trim();
+      const reason = document.getElementById('reason').value.trim();
+
+      const subject = encodeURIComponent('ClawPet Waitlist');
+      const body = encodeURIComponent(
+        `Name: ${name}\nEmail: ${email}\nRole: ${role}\n\nWhy I want ClawPet:\n${reason}`
+      );
+
+      statusEl.textContent = 'Opening your email app with a pre-filled waitlist message…';
+      window.location.href = `mailto:tongz27@uci.edu?subject=${subject}&body=${body}`;
+    });
+  </script>
 </body>
 </html>
