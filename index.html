@@ -367,39 +367,21 @@
       border-radius: 24px;
       padding: 20px;
       display: grid;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .waitlist-form label {
-      font-size: 0.92rem;
-      color: #d4d4d8;
-      display: grid;
-      gap: 7px;
-    }
-
-    .waitlist-form input,
-    .waitlist-form textarea,
-    .waitlist-form select {
+    .form-embed {
       width: 100%;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
-      padding: 13px 14px;
-      font: inherit;
-      outline: none;
+      min-height: 820px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      background: #fff;
     }
 
-    .waitlist-form textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-
-    .waitlist-form input:focus,
-    .waitlist-form textarea:focus,
-    .waitlist-form select:focus {
-      border-color: rgba(96,165,250,0.55);
-      box-shadow: 0 0 0 4px rgba(96,165,250,0.12);
+    .waitlist-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .fine {
@@ -464,6 +446,9 @@
       .hero-card-caption { flex-direction: column; align-items: flex-start; }
       .hero-card img { aspect-ratio: 1 / 1; }
       .media-card img { aspect-ratio: 4 / 3; }
+      .form-embed { min-height: 920px; }
+      .waitlist-actions { flex-direction: column; }
+      .waitlist-actions .btn { width: 100%; }
       section.block { padding: 24px 0; }
       footer { padding-top: 18px; }
     }
@@ -621,8 +606,19 @@
             <p style="color: #d4d4d8; font-size: 1rem; line-height: 1.7;">
               Tell us who you are, what you would use ClawPet for, and whether you want to build, research, or deploy one.
             </p>
-            <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLScbhCRb9GeDD16yO1P7MMJAwgvLDSVar-ZbWkUwgDZfK9s2vw/viewform" target="_blank" rel="noreferrer">Open Google Form</a>
-            <a class="btn btn-secondary" href="https://docs.google.com/forms/d/e/1FAIpQLScbhCRb9GeDD16yO1P7MMJAwgvLDSVar-ZbWkUwgDZfK9s2vw/viewform" target="_blank" rel="noreferrer">Fill it on mobile</a>
+            <iframe
+              class="form-embed"
+              src="https://docs.google.com/forms/d/e/1FAIpQLScbhCRb9GeDD16yO1P7MMJAwgvLDSVar-ZbWkUwgDZfK9s2vw/viewform?embedded=true"
+              frameborder="0"
+              marginheight="0"
+              marginwidth="0"
+              loading="lazy"
+              title="ClawPet Waitlist Form"
+            >Loading…</iframe>
+            <div class="waitlist-actions">
+              <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLScbhCRb9GeDD16yO1P7MMJAwgvLDSVar-ZbWkUwgDZfK9s2vw/viewform" target="_blank" rel="noreferrer">Open in Google Forms</a>
+              <a class="btn btn-secondary" href="https://docs.google.com/forms/d/e/1FAIpQLScbhCRb9GeDD16yO1P7MMJAwgvLDSVar-ZbWkUwgDZfK9s2vw/viewform" target="_blank" rel="noreferrer">Open on mobile</a>
+            </div>
             <div class="status">Responses now go straight into the ClawPet Google Form.</div>
           </div>
         </div>
