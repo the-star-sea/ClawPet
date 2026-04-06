@@ -613,36 +613,18 @@
               We are looking for early believers: hardware hackers, AI builders, researchers, creators, and anyone who wants to help shape the first generation of embodied desktop agents.
             </p>
             <p class="fine" style="margin-top: 12px;">
-              The current waitlist uses email compose for simplicity on GitHub Pages: submit and your device will open a pre-filled message.
+              The waitlist is now hosted on Google Forms for cleaner collection and easier follow-up.
             </p>
           </div>
 
-          <form class="waitlist-form" id="waitlist-form">
-            <label>
-              Name
-              <input type="text" id="name" name="name" placeholder="Your name" required>
-            </label>
-            <label>
-              Email
-              <input type="email" id="email" name="email" placeholder="you@example.com" required>
-            </label>
-            <label>
-              What best describes you?
-              <select id="role" name="role">
-                <option>Builder / hacker</option>
-                <option>Researcher</option>
-                <option>Founder / operator</option>
-                <option>Creator / designer</option>
-                <option>Just curious</option>
-              </select>
-            </label>
-            <label>
-              Why do you want ClawPet?
-              <textarea id="reason" name="reason" placeholder="What would you want your desktop pet to do?"></textarea>
-            </label>
-            <button class="btn btn-primary" type="submit">Join the waitlist</button>
-            <div class="status" id="waitlist-status"></div>
-          </form>
+          <div class="waitlist-form">
+            <p style="color: #d4d4d8; font-size: 1rem; line-height: 1.7;">
+              Tell us who you are, what you would use ClawPet for, and whether you want to build, research, or deploy one.
+            </p>
+            <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLScbhCRb9GeDD16yO1P7MMJAwgvLDSVar-ZbWkUwgDZfK9s2vw/viewform" target="_blank" rel="noreferrer">Open Google Form</a>
+            <a class="btn btn-secondary" href="https://docs.google.com/forms/d/e/1FAIpQLScbhCRb9GeDD16yO1P7MMJAwgvLDSVar-ZbWkUwgDZfK9s2vw/viewform" target="_blank" rel="noreferrer">Fill it on mobile</a>
+            <div class="status">Responses now go straight into the ClawPet Google Form.</div>
+          </div>
         </div>
       </div>
     </section>
@@ -678,25 +660,5 @@
     </div>
   </footer>
 
-  <script>
-    const form = document.getElementById('waitlist-form');
-    const statusEl = document.getElementById('waitlist-status');
-
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const role = document.getElementById('role').value.trim();
-      const reason = document.getElementById('reason').value.trim();
-
-      const subject = encodeURIComponent('ClawPet Waitlist');
-      const body = encodeURIComponent(
-        `Name: ${name}\nEmail: ${email}\nRole: ${role}\n\nWhy I want ClawPet:\n${reason}`
-      );
-
-      statusEl.textContent = 'Opening your email app with a pre-filled waitlist message…';
-      window.location.href = `mailto:tongz27@uci.edu?subject=${subject}&body=${body}`;
-    });
-  </script>
 </body>
 </html>
